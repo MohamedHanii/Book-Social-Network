@@ -10,3 +10,10 @@ springdoc:
 server:
   servlet:
     context-path:  /api/v1/
+
+
+application:
+  security:
+    jwt:
+      secret-key: 6519578981E4BAB1FBC7EBF3FFA97
+      expiration: 8640000
