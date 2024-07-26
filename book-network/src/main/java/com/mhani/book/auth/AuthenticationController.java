@@ -3,6 +3,7 @@ package com.mhani.book.auth;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,5 +22,17 @@ public class AuthenticationController {
     public ResponseEntity<?> register(@Valid @RequestBody RegistrationRequest request) throws MessagingException {
         authService.register(request);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/authenticate")
+    public ResponseEntity<AuthenticationResponse> authenticate(
+            @RequestBody @Valid AuthenticationRequest request
+    ){
+        return ResponseEntity.ok(authService.authenticate(request));
+    }
+
+    @GetMapping("/activate-account")
+    public void confirm(@RequestParam String token) throws MessagingException {
+        authService.activateAccount(token);
     }
 }
