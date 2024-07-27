@@ -1,14 +1,14 @@
 package com.mhani.book.book;
 
+import com.mhani.book.common.PageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("books")
@@ -24,5 +24,29 @@ public class BookController {
             Authentication connectedUser
     ){
         return ResponseEntity.ok(bookService.save(request,connectedUser));
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<BookResponse> getBookById(@PathVariable Integer id) {
+        return ResponseEntity.ok(bookService.findById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<PageResponse<BookResponse>> getAllBooks(
+            @RequestParam(name = "page", defaultValue = "0",required = false) int page,
+            @RequestParam(name = "size", defaultValue = "10",required = false) int size,
+            Authentication connectedUser
+    ) {
+
+        return ResponseEntity.ok(bookService.findAllBooks(page,size,connectedUser));
+    }
+
+    @GetMapping("/owner")
+    public ResponseEntity<PageResponse<BookResponse>> getAllBooksByOwner(
+            @RequestParam(name = "page", defaultValue = "0",required = false) int page,
+            @RequestParam(name = "size", defaultValue = "10",required = false) int size,
+            Authentication connectedUser
+    ){
+        return ResponseEntity.ok(bookService.findAllBooksByOwner(page,size,connectedUser));
     }
 }
